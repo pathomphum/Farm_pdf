@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm PDF Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Header / Navbar -->
+    <header>
+        <nav class="navbar section-content">
+            <a href="#" class="nav-logo">
+                <h2 class="logo-text">☕ Farm PDF</h2>
+            </a>
+        </nav>
+    </header>
+    <main>
+        <section class="Upload_file">
+            <div class="section-title">
+                <h1 class="title">Select the file type</h1>
+                <p class="description">Select the file type you want to convert.</p>
+                <form id="convert-form" action="/convert" method="post" enctype="multipart/form-data">
+                    <div id="select_file_type" style="display: none;">
+                        <label class="radio-option">
+                            <input type="radio" name="file_type" value="JPG"> JPG to PDF
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="file_type" value="PDF"> PDF to JPG
+                        </label>
+                    </div>
+                    <br>
+                    <input type="file" name="images" multiple><br><br>
+                    <button type="submit">Convert</button>
+                </form>             
+            </div>
+        </section>
+    </main>   
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const form = document.getElementById("convert-form");
+          const fileTypeSection = document.getElementById("select_file_type");
+      
+          // แสดงฟอร์มเมื่อลงโหลด หรือจะใช้จากปุ่มอื่นก็ได้
+          fileTypeSection.style.display = "block";
+      
+          const radios = document.getElementsByName("file_type");
+          const fileInput = form.querySelector('input[name="images"]');
+          const submitButton = form.querySelector('button[type="submit"]');
+      
+          radios.forEach(radio => {
+            radio.addEventListener("change", function () {
+              if (this.value === "JPG") {
+                fileInput.accept = ".jpg,.jpeg";
+                submitButton.textContent = "Convert to PDF";
+              } else if (this.value === "PDF") {
+                fileInput.accept = ".pdf";
+                submitButton.textContent = "Convert to JPGs";
+              }
+            });
+          });
+      
+          form.addEventListener("submit", function (e) {
+            const selected = [...radios].some(radio => radio.checked);
+            if (!selected) {
+              alert("กรุณาเลือกประเภทไฟล์ก่อนแปลง");
+              e.preventDefault();
+            }
+          });
+        });
+      </script>      
+</body>
+</html>
